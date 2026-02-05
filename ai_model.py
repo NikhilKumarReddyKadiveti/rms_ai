@@ -9,36 +9,24 @@ class RMS_AI:
         self.client = OpenAI(api_key=api_key)
         self.memory = ChatMemory()
 
-    def build_messages(self, user_message):
+    def ask(self, message):
 
-        messages = [
-            {
-                "role": "system",
-                "content": SYSTEM_PROMPT
-            }
+        msgs = [
+            {"role":"system","content":SYSTEM_PROMPT}
         ]
 
-        messages += self.memory.get_messages()
+        msgs += self.memory.get()
 
-        messages.append({
-            "role": "user",
-            "content": user_message
-        })
+        msgs.append({"role":"user","content":message})
 
-        return messages
-
-    def ask(self, user_message):
-
-        messages = self.build_messages(user_message)
-
-        response = self.client.chat.completions.create(
+        res = self.client.chat.completions.create(
             model="gpt-4.1-mini",
-            messages=messages
+            messages=msgs
         )
 
-        reply = response.choices[0].message.content
+        reply = res.choices[0].message.content
 
-        self.memory.add_user(user_message)
+        self.memory.add_user(message)
         self.memory.add_ai(reply)
 
         return reply
