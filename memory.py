@@ -4,16 +4,10 @@ class ChatMemory:
         self.messages = []
 
     def add_user(self, text):
-        self.messages.append({
-            "role": "user",
-            "content": text
-        })
+        self.messages.append({"role":"user","content":text})
 
     def add_ai(self, text):
-        self.messages.append({
-            "role": "assistant",
-            "content": text
-        })
+        self.messages.append({"role":"assistant","content":text})
 
-    def get_messages(self):
+    def get(self):
         return self.messages
